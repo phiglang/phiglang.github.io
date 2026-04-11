@@ -1,0 +1,19 @@
+.hl-error {
+    color: #e54545;
+}
+.hl-key {
+    color: #d4a0e0;
+}
+.hl-string {
+    color: #c9a07a;
+}
+.hl-qescape {
+    color: #d88a72;
+}
+.hl-brace {
+    color: #7a9a6a;
+}
+.hl-comment {
+    color: #5a4558;
+    font-style: italic;
+}

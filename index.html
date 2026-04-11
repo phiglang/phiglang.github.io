@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>phig</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap"
+            rel="stylesheet"
+        />
+    </head>
+    <body>
+        <div class="wrap">
+            <header>
+                <h1>phig</h1>
+                <p>A tiny configuration language</p>
+            </header>
+
+            <section>
+                <h2>Demo</h2>
+                <div class="demo">
+                    <div class="pane">
+                        <div class="pane-header"><span>phig</span></div>
+                        <div class="input-wrap">
+                            <div class="hl-layer" id="highlight"></div>
+                            <div
+                                class="hl-layer squiggle-layer"
+                                id="squiggles"
+                            ></div>
+                            <textarea id="input" spellcheck="false">
+# app config
+name "My App \u{1f331}"
+version 1.0.2
+tags [web production v2]
+
+server {
+  host 0.0.0.0; port 8080
+  tls {
+    cert 'C:\myapp\cert.pem'
+    key 'C:\myapp\key.pem'
+  }
+}
+
+db {
+  url 'postgres://localhost/primary'
+  pool { min 2; max 10 }
+}
+
+log { level debug; format "%t\t%msg\n" }
+
+cors [
+  https://example.com
+  http://localhost:3000
+]
+
+motd "welcome \
+to my app"</textarea
+                            >
+                        </div>
+                    </div>
+                    <div class="pane">
+                        <div class="pane-header">
+                            <span>json</span><span id="status"></span>
+                        </div>
+                        <div class="output-pane" id="output"></div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2>Grammar</h2>
+                <div class="features">
+                    <div>
+                        <strong>Maps</strong>
+                        <p><code>{}</code> with <code>key value</code> pairs</p>
+                    </div>
+                    <div>
+                        <strong>Lists</strong>
+                        <p><code>[]</code> with list items</p>
+                    </div>
+                    <div>
+                        <strong>Strings</strong>
+                        <p>
+                            <code>bare</code>, <code>"quoted"</code>,
+                            <code>'raw'</code>
+                        </p>
+                    </div>
+                    <div>
+                        <strong>Comments</strong>
+                        <p><code>#</code> to end of line</p>
+                    </div>
+                </div>
+                <pre class="grammar">
+toplevel = _ [ pairs ] _
+value    =  map | list | string
+
+map      = '{' _ [ pairs ] _ '}'
+pairs    = pair { PAIRSEP _ pair }
+pair     = string [ HSPACE ] value [ HSPACE ] [ COMMENT ]
+list     = '[' _ { value _ } ']'
+string   = QSTRING | QRSTRING | BARE
+
+QSTRING  = '"' { QCHAR } '"'
+QCHAR    = /[^"\\]/ | QESCAPE
+QESCAPE  = '\' ( /[nrt\\"0\n]/ | 'u{' /[0-9a-fA-F]{1,6}/ '}' )
+
+QRSTRING = "'" /'[^']*'/ "'"
+
+BARE     = /[^\s{}\[\]"#';]+/
+
+_        = { WS | COMMENT }
+WS       = /\s+/
+HSPACE   = /[ \t]+/
+PAIRSEP  = /(\r?\n)+|;/
+COMMENT  = '#' /[^\n]*/</pre
+                >
+            </section>
+        </div>
+        <script type="module" src="/src/main.ts"></script>
+    </body>
+</html>
