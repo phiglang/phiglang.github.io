@@ -12,7 +12,7 @@ export type TokenClass =
   | "comment"
   | "key"
   | "string"
-  | "brace"
+  | "punct"
   | "qescape"
   | "error";
 
@@ -48,7 +48,7 @@ export function parse(
   // PAIRSEP = /(\r?\n)+|;/
   function pairsep(): boolean {
     if (pos < len && src[pos] === ";") {
-      emit(null, src.slice(pos, pos + 1));
+      emit("punct", src.slice(pos, pos + 1));
       ++pos;
       return true;
     }
@@ -281,13 +281,13 @@ export function parse(
   // map = '{' _ [ pairs ] _ '}'
   function map(): Record<string, unknown> {
     const openPos = pos;
-    emit("brace", "{");
+    emit("punct", "{");
     ++pos;
     wsc();
     const obj = pairs("}");
     wsc();
     if (pos < len && src[pos] === "}") {
-      emit("brace", "}");
+      emit("punct", "}");
       ++pos;
     } else {
       err("unclosed '{'", openPos, openPos + 1);
@@ -298,7 +298,7 @@ export function parse(
   // list = '[' _ { value _ } ']'
   function list(): unknown[] {
     const openPos = pos;
-    emit("brace", "[");
+    emit("punct", "[");
     ++pos;
     const arr: unknown[] = [];
     wsc();
@@ -317,7 +317,7 @@ export function parse(
       wsc();
     }
     if (pos < len && src[pos] === "]") {
-      emit("brace", "]");
+      emit("punct", "]");
       ++pos;
     } else {
       err("unclosed '['", openPos, openPos + 1);

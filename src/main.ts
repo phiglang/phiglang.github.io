@@ -26,23 +26,29 @@ function highlightJSON(obj: unknown, indent = 0): string {
   const p = "  ".repeat(indent),
     p1 = "  ".repeat(indent + 1);
   if (Array.isArray(obj)) {
-    if (!obj.length) return '<span class="hl-brace">[]</span>';
-    return `<span class="hl-brace">[</span>\n${obj
+    if (!obj.length) return '<span class="hl-punct">[]</span>';
+    return `<span class="hl-punct">[</span>\n${obj
       .map(
         (v, i) =>
-          `${p1}${highlightJSON(v, indent + 1)}${i < obj.length - 1 ? "," : ""}`,
+          p1 +
+          highlightJSON(v, indent + 1) +
+          (i < obj.length - 1 ? '<span class="hl-punct">,</span>' : ""),
       )
-      .join("\n")}\n${p}<span class="hl-brace">]</span>`;
+      .join("\n")}\n${p}<span class="hl-punct">]</span>`;
   }
   if (obj && typeof obj === "object") {
     const keys = Object.keys(obj);
-    if (!keys.length) return '<span class="hl-brace">{}</span>';
-    return `<span class="hl-brace">{</span>\n${keys
+    if (!keys.length) return '<span class="hl-punct">{}</span>';
+    return `<span class="hl-punct">{</span>\n${keys
       .map(
         (k, i) =>
-          `${p1}<span class="hl-key">"${escapeHTML(JSON.stringify(k).slice(1, -1))}"</span>: ${highlightJSON(obj[k as keyof typeof obj], indent + 1)}${i < keys.length - 1 ? "," : ""}`,
+          p1 +
+          `<span class="hl-key">"${escapeHTML(JSON.stringify(k).slice(1, -1))}"</span>` +
+          '<span class="hl-punct">:</span> ' +
+          highlightJSON(obj[k as keyof typeof obj], indent + 1) +
+          (i < keys.length - 1 ? '<span class="hl-punct">,</span>' : ""),
       )
-      .join("\n")}\n${p}<span class="hl-brace">}</span>`;
+      .join("\n")}\n${p}<span class="hl-punct">}</span>`;
   }
   if (typeof obj === "string")
     return `<span class="hl-string">"${escapeHTML(JSON.stringify(obj).slice(1, -1))}"</span>`;
@@ -115,7 +121,7 @@ update();
 
 const g = document.querySelector(".grammar")!;
 g.innerHTML = g.textContent!.replace(
-  /(?<key>^\w+)(?=\s*=)|(?<string>'[^']*'|"[^"]*")|(?<qescape>\/[^/]*\/)|(?<brace>[[\]{}()|=])/gm,
+  /(?<key>^\w+)(?=\s*=)|(?<string>'[^']*'|"[^"]*")|(?<qescape>\/[^/]*\/)|(?<punct>[[\]{}()|=])/gm,
   (...args) => {
     for (const [cls, text] of Object.entries(args.at(-1)!)) {
       if (text)
