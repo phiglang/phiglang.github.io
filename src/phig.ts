@@ -295,13 +295,9 @@ export function parse(
     return obj;
   }
 
-  // list = '[' _ { value _ } ']'
-  function list(): unknown[] {
-    const openPos = pos;
-    emit("punct", "[");
-    ++pos;
+  // items = value { _ [ ';' ] _ value }
+  function items(): unknown[] {
     const arr: unknown[] = [];
-    wsc();
     while (pos < len && src[pos] !== "]") {
       const v = value();
       if (v === null) {
@@ -313,14 +309,34 @@ export function parse(
         wsc();
         continue;
       }
+
       arr.push(v);
+
+      if (pos >= len || src[pos] === "]") break;
+
+      wsc();
+      if (pos < len && src[pos] === ";") {
+        emit("punct", ";");
+        ++pos;
+      }
       wsc();
     }
+    return arr;
+  }
+
+  // list = '[' _ { value _ } ']'
+  function list(): unknown[] {
+    const openPos = pos;
+    emit("punct", "[");
+    ++pos;
+    wsc();
+    const arr = items();
+    wsc();
     if (pos < len && src[pos] === "]") {
       emit("punct", "]");
       ++pos;
     } else {
-      err("unclosed '['", openPos, openPos + 1);
+      err("unclosed ']'", openPos, openPos + 1);
     }
     return arr;
   }

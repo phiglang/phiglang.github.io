@@ -72,7 +72,10 @@ to my app"</textarea
                 <div class="features">
                     <div>
                         <h3>Maps</h3>
-                        <p><code>{}</code> with <code>key value</code> pairs</p>
+                        <p>
+                            <code>{}</code> with <code>key value</code> pairs,
+                            no dupes
+                        </p>
                     </div>
                     <div>
                         <h3>Lists</h3>
@@ -92,27 +95,28 @@ to my app"</textarea
                 </div>
                 <pre class="grammar">
 toplevel = _ [ pairs ] _
+
 value    =  map | list | string
 
 map      = '{' _ [ pairs ] _ '}'
 pairs    = pair { PAIRSEP _ pair }
 pair     = string [ HSPACE ] value [ HSPACE ] [ COMMENT ]
-list     = '[' _ { value _ } ']'
-string   = QSTRING | QRSTRING | BARE
 
+list     = '[' _ [ items ] _ ']'
+items     = value { _ [ ';' ] _ value }
+
+string   = QSTRING | QRSTRING | BARE
 QSTRING  = '"' { QCHAR } '"'
 QCHAR    = /[^"\\]/ | QESCAPE
 QESCAPE  = '\' ( /[nrt\\"0\n]/ | 'u{' /[0-9a-fA-F]{1,6}/ '}' )
-
 QRSTRING = "'" /'[^']*'/ "'"
-
 BARE     = /[^\s{}\[\]"#';]+/
 
 _        = { WS | COMMENT }
 WS       = /\s+/
+COMMENT  = '#' /[^\n]*/
 HSPACE   = /[ \t]+/
-PAIRSEP  = /(\r?\n)+|;/
-COMMENT  = '#' /[^\n]*/</pre
+PAIRSEP  = /(\r?\n)+|;/</pre
                 >
             </section>
         </div>
