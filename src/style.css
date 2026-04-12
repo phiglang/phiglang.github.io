@@ -111,6 +111,7 @@ section {
     font-family: var(--mono);
     font-size: 0.78rem;
     line-height: 1.6;
+    overflow-x: auto;
 }
 
 .demo {
