@@ -8,8 +8,8 @@
 
 :root {
     --bg: #faf3f0;
-    --fg: #2e1a2b;
-    --dim: #8a6e80;
+    --fg: #8a6e80;
+    --accent: #2e1a2b;
     --surface: #f0e4e8;
     --border: #ddc8d0;
     --editor: #2b1528;
@@ -51,13 +51,13 @@ header {
     gap: 12px;
 
     h1 {
+        color: var(--accent);
         font-family: var(--mono);
         font-size: 1.4rem;
         font-weight: 500;
     }
 
-    p {
-        color: var(--dim);
+    small {
         font-size: 0.85rem;
         text-transform: lowercase;
     }
@@ -68,10 +68,11 @@ section {
     border-top: 1px solid var(--border);
 
     h2 {
+        color: var(--accent);
         font-family: var(--mono);
-        font-size: 0.7rem;
+        font-size: 0.8rem;
         text-transform: lowercase;
-        letter-spacing: 2px;
+        letter-spacing: 1px;
         color: var(--dim);
         margin-bottom: 8px;
     }
@@ -86,14 +87,13 @@ section {
     div {
         font-size: 0.85rem;
 
-        strong {
-            display: block;
-            margin-bottom: 1px;
+        h3 {
+            color: var(--accent);
+            font-size: 0.9rem;
             text-transform: lowercase;
         }
 
         p {
-            color: var(--dim);
             font-size: 0.8rem;
         }
     }
@@ -109,9 +109,8 @@ section {
     color: var(--editor-fg);
     padding: 12px 16px;
     font-family: var(--mono);
-    font-size: 0.72rem;
-    line-height: 1.8;
-    overflow-x: auto;
+    font-size: 0.78rem;
+    line-height: 1.6;
 }
 
 .demo {
@@ -189,6 +188,7 @@ section {
         background: transparent;
         resize: none;
         outline: none;
+        overscroll-behavior: none;
     }
 }
 
