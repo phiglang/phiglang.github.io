@@ -122,6 +122,7 @@ section {
     a {
         color: var(--accent);
         text-decoration: none;
+        text-transform: lowercase;
 
         &:hover {
             text-decoration: underline;
