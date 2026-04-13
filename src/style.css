@@ -114,6 +114,21 @@ section {
     overflow-x: auto;
 }
 
+.spec-link {
+    margin-top: 10px;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+
+    a {
+        color: var(--accent);
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
 .demo {
     display: grid;
     grid-template-columns: 1fr 1fr;

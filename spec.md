@@ -51,7 +51,7 @@ Only four characters are structural whitespace: space (U+0020), tab (U+0009), ne
 | Escape | Result |
 |-|-|
 | `\n` `\r` `\t` `\\` `\"` `\0` | the usual |
-| `\` newline | line continuation (no output) |
+| `\` LF | line continuation (no output) |
 | `\u{X}` | Unicode scalar (1–6 hex digits) |
 
 Any other `\X` is an error. Surrogates and code points above U+10FFFF are errors.
@@ -60,7 +60,7 @@ Any other `\X` is an error. Surrogates and code points above U+10FFFF are errors
 
 ## Maps
 
-Braces delimit maps. Keys are strings, values are any type. Pairs are separated by newlines or semicolons. Duplicate keys in the same map are an error. Key order is preserved.
+Braces delimit maps. Keys are strings, values are any type. Pairs are separated by newlines or semicolons. A trailing separator after the last pair is permitted, but consecutive separators without a pair between them (e.g., `;;`) are not. Duplicate keys in the same map are an error. Implementations should preserve key order if possible. Mismatched closing delimiters (e.g., `{` closed by `]`) are errors.
 
 ## Lists
 
@@ -72,7 +72,7 @@ A document is an implicit map. A top-level list or bare value is an error.
 
 ## Errors
 
-A conforming parser MUST reject: unterminated or invalid strings, unclosed delimiters, duplicate keys, missing values, missing pair separators, invalid escapes, and non-map top-level values.
+A conforming parser MUST reject: unterminated or invalid strings, unclosed or mismatched delimiters, extra closing delimiters, duplicate keys, missing values, missing pair separators, invalid escapes, and non-map top-level values.
 
 Error message format is not specified.
 
