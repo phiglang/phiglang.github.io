@@ -105,7 +105,7 @@ items    = value { _ [ ';' ] _ value }
 string   = QSTRING | QRSTRING | BARE
 QSTRING  = '"' { QCHAR } '"'
 QCHAR    = /[^"\\]/ | QESCAPE
-QESCAPE  = '\' ( /[rnt\\"0\n]/ | 'u{' /[0-9a-fA-F]{1,6}/ '}' )
+QESCAPE  = '\' ( /[rnt\\"0]/ | /\r?\n/ | 'u{' /[0-9a-fA-F]{1,6}/ '}' )
 QRSTRING = "'" /[^']*/ "'"
 BARE     = /[^\p{White_Space}{}[\]"#';]+/
 

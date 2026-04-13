@@ -162,7 +162,18 @@ export function parse(
       }
 
       const c = src[pos];
-      if (c in SIMPLE_QESCAPES) {
+      if (c === "\r") {
+        // line continuation: \<CR><LF>
+        ++pos;
+        if (pos < len && src[pos] === "\n") {
+          ++pos;
+        } else {
+          emit("error", src.slice(escStart, pos));
+          err("expected LF after CR in line continuation", escStart, pos);
+          continue;
+        }
+        emit("qescape", src.slice(escStart, pos));
+      } else if (c in SIMPLE_QESCAPES) {
         result += SIMPLE_QESCAPES[c as keyof typeof SIMPLE_QESCAPES];
         ++pos;
         emit("qescape", src.slice(escStart, pos));

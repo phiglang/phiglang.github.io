@@ -23,7 +23,7 @@ items    = value { _ [ ';' ] _ value }
 string   = QSTRING | QRSTRING | BARE
 QSTRING  = '"' { QCHAR } '"'
 QCHAR    = /[^"\\]/ | QESCAPE
-QESCAPE  = '\' ( /[rnt\\"0\n]/ | 'u{' /[0-9a-fA-F]{1,6}/ '}' )
+QESCAPE  = '\' ( /[rnt\\"0]/ | /\r?\n/ | 'u{' /[0-9a-fA-F]{1,6}/ '}' )
 QRSTRING = "'" /[^']*/ "'"
 BARE     = /[^\p{White_Space}{}[\]"#';]+/
 
@@ -51,7 +51,7 @@ Only four characters are structural whitespace: space (U+0020), tab (U+0009), ne
 | Escape | Result |
 |-|-|
 | `\n` `\r` `\t` `\\` `\"` `\0` | the usual |
-| `\` LF | line continuation (no output) |
+| `\` CRLF or LF | line continuation (no output) |
 | `\u{X}` | Unicode scalar (1–6 hex digits) |
 
 Any other `\X` is an error. Surrogates and code points above U+10FFFF are errors.
