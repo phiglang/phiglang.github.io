@@ -121,7 +121,7 @@ update();
 
 const g = document.querySelector(".grammar")!;
 g.innerHTML = g.textContent!.replace(
-  /(?<key>\w+)|(?<string>'[^']*'|"[^"]*")|(?<qescape>\/[^/]*\/)|(?<punct>[[\]{}()|=])/gm,
+  /(?<comment>#[^\n]*)|(?<key>\w+)|(?<string>'[^']*'|"[^"]*")|(?<qescape>\/[^/]*\/)|(?<punct>[[\]{}()|=])/gm,
   (...args) => {
     for (const [cls, text] of Object.entries(args.at(-1)!)) {
       if (text)

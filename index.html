@@ -94,26 +94,26 @@ to my app"</textarea
                     </div>
                 </div>
                 <pre class="grammar">
-toplevel = _ [ pairs ] _
+toplevel = _ [ pairs ] _ EOF
 
-value    =  map | list | string
+value    = map | list | string
 
-map      = '{' _ [ pairs ] _ '}'
+map      = '{' _ [ pairs ] _ '}'        # keys are ordered, no duplicates
 pairs    = pair { PAIRSEP _ pair }
 pair     = string [ HSPACE ] value [ HSPACE ] [ COMMENT ]
 
 list     = '[' _ [ items ] _ ']'
-items     = value { _ [ ';' ] _ value }
+items    = value { _ [ ';' ] _ value }
 
 string   = QSTRING | QRSTRING | BARE
 QSTRING  = '"' { QCHAR } '"'
 QCHAR    = /[^"\\]/ | QESCAPE
 QESCAPE  = '\' ( /[nrt\\"0\n]/ | 'u{' /[0-9a-fA-F]{1,6}/ '}' )
-QRSTRING = "'" /'[^']*'/ "'"
+QRSTRING = "'" /[^']*/ "'"
 BARE     = /[^\s{}\[\]"#';]+/
 
 _        = { WS | COMMENT }
-WS       = /\s+/
+WS       = /[\r\n\t ]+/
 COMMENT  = '#' /[^\n]*/
 HSPACE   = /[ \t]+/
 PAIRSEP  = /(\r?\n)+|;/</pre
