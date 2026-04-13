@@ -141,11 +141,13 @@ section {
     min-height: 0;
 
     textarea,
-    .hl-layer {
+    .hl-layer,
+    .squiggle-layer {
         position: absolute;
         inset: 0;
         padding: var(--editor-pad);
         font-family: var(--mono);
+        font-size: 1rem;
         line-height: var(--editor-line-height);
         white-space: pre;
         overflow: auto;
