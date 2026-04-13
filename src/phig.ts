@@ -80,14 +80,15 @@ export function parse(
     return false;
   }
 
-  // _ = { /\s+/ | COMMENT }
+  // _ = { WS | COMMENT }   WS = /[\r\n\t ]+/
   function wsc() {
     while (pos < len) {
       if (src[pos] === "#") {
         comment();
-      } else if (/\s/.test(src[pos])) {
+      } else if (" \t\r\n".includes(src[pos])) {
         const start = pos;
-        while (pos < len && /\s/.test(src[pos]) && src[pos] !== "#") ++pos;
+        while (pos < len && " \t\r\n".includes(src[pos]) && src[pos] !== "#")
+          ++pos;
         emit(null, src.slice(start, pos));
       } else {
         break;
@@ -184,10 +185,10 @@ export function parse(
     return result;
   }
 
-  // BARE = /[^\s{}\[\]"#';]+/
+  // BARE = /[^\p{White_Space}{}[\]"#';]+/
   function bare(): string | null {
     const start = pos;
-    while (pos < len && !/[\s{}\[\]"#';]/.test(src[pos])) ++pos;
+    while (pos < len && !/[\s{}[\]"#';]/u.test(src[pos])) ++pos;
     if (pos === start) return null;
     return src.slice(start, pos);
   }

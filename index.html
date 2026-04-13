@@ -110,7 +110,7 @@ QSTRING  = '"' { QCHAR } '"'
 QCHAR    = /[^"\\]/ | QESCAPE
 QESCAPE  = '\' ( /[rnt\\"0\n]/ | 'u{' /[0-9a-fA-F]{1,6}/ '}' )
 QRSTRING = "'" /[^']*/ "'"
-BARE     = /[^\s{}\[\]"#';]+/
+BARE     = /[^\p{White_Space}{}[\]"#';]+/
 
 _        = { WS | COMMENT }
 WS       = /[\r\n\t ]+/
