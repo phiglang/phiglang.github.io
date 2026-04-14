@@ -199,7 +199,7 @@ export function parse(
   // BARE = /[^\p{White_Space}{}[\]"#';]+/
   function bare(): string | null {
     const start = pos;
-    while (pos < len && !/[\s{}[\]"#';]/u.test(src[pos])) ++pos;
+    while (pos < len && !/[\p{White_Space}{}[\]"#';]/u.test(src[pos])) ++pos;
     if (pos === start) return null;
     return src.slice(start, pos);
   }
