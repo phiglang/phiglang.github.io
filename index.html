@@ -91,7 +91,7 @@ to my app"</textarea
                     </div>
                 </div>
                 <pre class="grammar">
-toplevel = _ [ pairs ] _ EOF
+toplevel = [ BOM ] _ [ pairs ] _ EOF
 
 value    = map | list | string
 
@@ -110,6 +110,7 @@ QRSTRING = "'" /[^']*/ "'"
 BARE     = /[^\p{White_Space}{}[\]"#';]+/
 
 _        = { WS | COMMENT }
+BOM      = /\u{FEFF}/
 WS       = /[\r\n\t ]+/
 COMMENT  = '#' /[^\n]*/
 HSPACE   = /[ \t]+/

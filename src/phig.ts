@@ -353,7 +353,11 @@ export function parse(
     return arr;
   }
 
-  // toplevel = _ [ pairs ] _
+  // toplevel = [ BOM ] _ [ pairs ] _ EOF
+  if (pos < len && src[pos] === "\uFEFF") {
+    emit(null, src[pos]);
+    ++pos;
+  }
   wsc();
   const root = pairs(null);
   wsc();

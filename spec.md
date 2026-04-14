@@ -4,12 +4,12 @@ v0.1.0
 
 ## Encoding
 
-UTF-8. No BOM.
+UTF-8. BOM optional, discouraged.
 
 ## Grammar
 
 ```
-toplevel = _ [ pairs ] _ EOF
+toplevel = [ BOM ] _ [ pairs ] _ EOF
 
 value    = map | list | string
 
@@ -28,6 +28,7 @@ QRSTRING = "'" /[^']*/ "'"
 BARE     = /[^\p{White_Space}{}[\]"#';]+/
 
 _        = { WS | COMMENT }
+BOM      = /\u{FEFF}/
 WS       = /[\r\n\t ]+/
 COMMENT  = '#' /[^\n]*/
 HSPACE   = /[ \t]+/
