@@ -14,12 +14,13 @@ A phig document MUST be encoded as UTF-8. A byte order mark (BOM) MAY be present
 
 ## Grammar
 
+<!--grammar-->
 ```
 toplevel = [ BOM ] _ [ pairs ] _ EOF
 
 value    = map | list | string
 
-map      = '{' _ [ pairs ] _ '}'
+map      = '{' _ [ pairs ] _ '}'        # keys are ordered, no duplicates
 pairs    = pair { PAIRSEP _ pair }
 pair     = string [ HSPACE ] value [ HSPACE ] [ COMMENT ]
 
@@ -40,6 +41,7 @@ COMMENT  = '#' /[^\n]*/
 HSPACE   = /[ \t]+/
 PAIRSEP  = /(\r?\n)+|;/
 ```
+<!--/grammar-->
 
 ## Data Model
 

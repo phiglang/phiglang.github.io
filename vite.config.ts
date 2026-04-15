@@ -1,22 +1,32 @@
 import { readFileSync } from "node:fs";
+import { resolve } from "node:path";
 import { marked, type Tokens } from "marked";
 import type { Plugin } from "vite";
+
+const SPEC_PATH = resolve("spec.md");
+
+function readSpec() {
+  const md = readFileSync("spec.md", "utf-8");
+  const tokens = marked.lexer(md);
+  const h1 = tokens.find(
+    (t): t is Tokens.Heading => t.type === "heading" && t.depth === 1,
+  );
+  const grammarMatch = md.match(
+    /<!--grammar-->\n```\n([\s\S]*?)\n```\n<!--\/grammar-->/,
+  );
+  return { tokens, h1, grammar: grammarMatch?.[1] ?? "" };
+}
+
+function escapeHtml(s: string): string {
+  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
 
 function specPlugin(): Plugin {
   const SPEC_FILENAME = "spec.html";
 
   function render(): string {
-    const md = readFileSync("spec.md", "utf-8");
-    const tokens = marked.lexer(md);
-    const h1 = tokens.find(
-      (t): t is Tokens.Heading => t.type === "heading" && t.depth === 1,
-    );
-    const title = h1
-      ? h1.text
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-      : "phig spec";
+    const { tokens, h1 } = readSpec();
+    const title = h1 ? escapeHtml(h1.text) : "phig spec";
     const body = marked.parser(tokens);
     return `<!doctype html>
 <html lang="en">
@@ -58,6 +68,24 @@ th, td { border: 1px solid #ddd; padding: 4px 10px; text-align: left; }
   };
 }
 
+function grammarPlugin(): Plugin {
+  return {
+    name: "grammar",
+    configureServer(server) {
+      server.watcher.add(SPEC_PATH);
+      server.watcher.on("change", (file) => {
+        if (file === SPEC_PATH) {
+          server.ws.send({ type: "full-reload" });
+        }
+      });
+    },
+    transformIndexHtml(html) {
+      const { grammar } = readSpec();
+      return html.replace("%GRAMMAR%", escapeHtml(grammar));
+    },
+  };
+}
+
 export default {
-  plugins: [specPlugin()],
+  plugins: [specPlugin(), grammarPlugin()],
 };
