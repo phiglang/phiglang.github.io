@@ -65,7 +65,7 @@ Braces delimit maps. Keys are strings, values are any type. Pairs are separated 
 
 ## Lists
 
-Brackets delimit lists. Items are separated by whitespace; semicolons are optional additional separators.
+Brackets delimit lists. Items are separated by whitespace; a single semicolon can be used as an optional separator.
 
 ## Top level
 
