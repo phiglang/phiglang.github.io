@@ -3,7 +3,7 @@ import { marked, type Tokens } from "marked";
 import type { Plugin } from "vite";
 
 function specPlugin(): Plugin {
-  const SPEC_ID = "/spec.html";
+  const SPEC_FILENAME = "spec.html";
 
   function render(): string {
     const md = readFileSync("spec.md", "utf-8");
@@ -40,7 +40,7 @@ th, td { border: 1px solid #ddd; padding: 4px 10px; text-align: left; }
     name: "spec",
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
-        if (req.url === SPEC_ID) {
+        if (req.url === `/${SPEC_FILENAME}`) {
           res.setHeader("Content-Type", "text/html");
           res.end(render());
         } else {
@@ -51,7 +51,7 @@ th, td { border: 1px solid #ddd; padding: 4px 10px; text-align: left; }
     generateBundle() {
       this.emitFile({
         type: "asset",
-        fileName: "spec.html",
+        fileName: SPEC_FILENAME,
         source: render(),
       });
     },
