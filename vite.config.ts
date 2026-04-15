@@ -1,5 +1,5 @@
 import { readFileSync } from "node:fs";
-import { marked } from "marked";
+import { marked, type Tokens } from "marked";
 import type { Plugin } from "vite";
 
 function specPlugin(): Plugin {
@@ -7,13 +7,23 @@ function specPlugin(): Plugin {
 
   function render(): string {
     const md = readFileSync("spec.md", "utf-8");
-    const body = marked.parse(md, { async: false }) as string;
+    const tokens = marked.lexer(md);
+    const h1 = tokens.find(
+      (t): t is Tokens.Heading => t.type === "heading" && t.depth === 1,
+    );
+    const title = h1
+      ? h1.text
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+      : "phig spec";
+    const body = marked.parser(tokens);
     return `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>phig spec</title>
+<title>${title}</title>
 <style>
 body { max-width: 720px; margin: 0 auto; padding: 20px; font-family: system-ui, sans-serif; line-height: 1.6; color: #333; }
 pre { background: #f5f5f5; padding: 12px 16px; border-radius: 4px; overflow-x: auto; }
