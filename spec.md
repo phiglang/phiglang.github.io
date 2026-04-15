@@ -6,7 +6,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ## Introduction
 
-Phig is a minimal configuration language with three data types: strings, lists, and maps. It is designed to be simple to parse and simple to read. This document defines the syntax and data model of phig.
+Phig is a minimal configuration language with three data types: strings, lists, and maps. It aims to be as simple as possible while remaining comfortable to write by hand: simple enough that a parser is straightforward to implement, but not so stripped down that authors must fight the syntax to express everyday configuration. This document defines the syntax and data model of phig.
 
 ## Encoding
 
